@@ -22,4 +22,11 @@ class EditProductFeatureForm extends AbstractProductFeatureForm
     {
         return route('api.v1.productFeatures.update', ['productFeature' => $this->productFeature->getKey()]);
     }
+
+    public function getValues(): array
+    {
+        return [
+            //
+        ];
+    }
 }

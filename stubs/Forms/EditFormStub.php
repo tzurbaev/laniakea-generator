@@ -22,4 +22,11 @@ class EditFormStub extends AbstractFormStub
     {
         return route('api.v1.{resource:plural}.update', ['{resource:singular}' => $this->model->getKey()]);
     }
+
+    public function getValues(): array
+    {
+        return [
+            //
+        ];
+    }
 }

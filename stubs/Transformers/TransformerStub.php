@@ -9,7 +9,7 @@ use Stubs\Vendor\AbstractTransformer;
 
 class TransformerStub extends AbstractTransformer
 {
-    public function tranform(ModelStub $model): array
+    public function transform(ModelStub $model): array
     {
         return [
             //

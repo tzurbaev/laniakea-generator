@@ -6,12 +6,15 @@ namespace Stubs\Http;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Laniakea\Forms\Interfaces\FormsManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceRequestInterface;
 use Stubs\Actions\CreateActionStub;
 use Stubs\Actions\DestroyActionStub;
 use Stubs\Actions\UpdateActionStub;
+use Stubs\Forms\EditFormStub;
 use Stubs\Http\Requests\DestroyRequestStub;
+use Stubs\Http\Requests\EditRequestStub;
 use Stubs\Http\Requests\ListRequestStub;
 use Stubs\Http\Requests\StoreRequestStub;
 use Stubs\Http\Requests\UpdateRequestStub;
@@ -49,6 +52,15 @@ readonly class ApiControllerStub
         return fractal($request->getResource(), new TransformerStub())
             ->parseIncludes($requester->getInclusions())
             ->respond();
+    }
+
+    public function form(EditRequestStub $request, FormsManagerInterface $formsManager): JsonResponse
+    {
+        return response()->json([
+            'data' => [
+                'form' => $formsManager->getFormData(new EditFormStub($request->getResource())),
+            ],
+        ]);
     }
 
     public function update(UpdateRequestStub $request, UpdateActionStub $action): JsonResponse

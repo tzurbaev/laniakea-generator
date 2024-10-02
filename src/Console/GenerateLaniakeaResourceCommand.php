@@ -15,7 +15,7 @@ use function Laravel\Prompts\select;
 
 class GenerateLaniakeaResourceCommand extends Command
 {
-    protected $signature = 'laniakea:generate {resource?} {--namespace=} {--path=}';
+    protected $signature = 'laniakea:generate {resource?} {--namespace=} {--path=} {--default-stubs}';
     protected $description = 'Generate a new Laniakea resource.';
 
     /**

@@ -9,7 +9,7 @@ use Virgo\Application\Fractal\AbstractTransformer;
 
 class ProductFeatureTransformer extends AbstractTransformer
 {
-    public function tranform(ProductFeature $productFeature): array
+    public function transform(ProductFeature $productFeature): array
     {
         return [
             //

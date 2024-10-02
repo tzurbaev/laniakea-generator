@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Laniakea\Tests\Workbench\ProductFeatures\Http;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Laniakea\Forms\Interfaces\FormsManagerInterface;
 use Laniakea\Tests\Workbench\ProductFeatures\Forms\CreateProductFeatureForm;
@@ -31,15 +30,6 @@ readonly class ProductFeaturesController
     {
         return view('crud.edit', [
             'form' => $formsManager->getFormData(new EditProductFeatureForm($request->getProductFeature())),
-        ]);
-    }
-
-    public function form(EditProductFeatureRequest $request, FormsManagerInterface $formsManager): JsonResponse
-    {
-        return response()->json([
-            'data' => [
-                'form' => $formsManager->getFormData(new EditProductFeatureForm($request->getProductFeature())),
-            ],
         ]);
     }
 }

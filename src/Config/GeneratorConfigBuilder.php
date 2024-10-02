@@ -26,6 +26,7 @@ readonly class GeneratorConfigBuilder
         return new GeneratorConfig(
             resource: $resource,
             namespace: $this->getNamespace($resource, $command),
+            forceDefaultStubs: $command->hasOption('default-stubs') && $command->option('default-stubs'),
         );
     }
 

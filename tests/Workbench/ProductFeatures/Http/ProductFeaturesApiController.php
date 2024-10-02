@@ -6,12 +6,15 @@ namespace Laniakea\Tests\Workbench\ProductFeatures\Http;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Laniakea\Forms\Interfaces\FormsManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceRequestInterface;
 use Laniakea\Tests\Workbench\ProductFeatures\Actions\CreateProductFeatureAction;
 use Laniakea\Tests\Workbench\ProductFeatures\Actions\DestroyProductFeatureAction;
 use Laniakea\Tests\Workbench\ProductFeatures\Actions\UpdateProductFeatureAction;
+use Laniakea\Tests\Workbench\ProductFeatures\Forms\EditProductFeatureForm;
 use Laniakea\Tests\Workbench\ProductFeatures\Http\Requests\DestroyProductFeatureRequest;
+use Laniakea\Tests\Workbench\ProductFeatures\Http\Requests\EditProductFeatureRequest;
 use Laniakea\Tests\Workbench\ProductFeatures\Http\Requests\ListProductFeaturesRequest;
 use Laniakea\Tests\Workbench\ProductFeatures\Http\Requests\StoreProductFeatureRequest;
 use Laniakea\Tests\Workbench\ProductFeatures\Http\Requests\UpdateProductFeatureRequest;
@@ -49,6 +52,15 @@ readonly class ProductFeaturesApiController
         return fractal($request->getProductFeature(), new ProductFeatureTransformer())
             ->parseIncludes($requester->getInclusions())
             ->respond();
+    }
+
+    public function form(EditProductFeatureRequest $request, FormsManagerInterface $formsManager): JsonResponse
+    {
+        return response()->json([
+            'data' => [
+                'form' => $formsManager->getFormData(new EditProductFeatureForm($request->getProductFeature())),
+            ],
+        ]);
     }
 
     public function update(UpdateProductFeatureRequest $request, UpdateProductFeatureAction $action): JsonResponse

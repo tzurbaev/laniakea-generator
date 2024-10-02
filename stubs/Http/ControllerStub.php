@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Stubs\Http;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Laniakea\Forms\Interfaces\FormsManagerInterface;
 use Stubs\Forms\CreateFormStub;
@@ -31,15 +30,6 @@ readonly class ControllerStub
     {
         return view('crud.edit', [
             'form' => $formsManager->getFormData(new EditFormStub($request->getResource())),
-        ]);
-    }
-
-    public function form(EditRequestStub $request, FormsManagerInterface $formsManager): JsonResponse
-    {
-        return response()->json([
-            'data' => [
-                'form' => $formsManager->getFormData(new EditFormStub($request->getResource())),
-            ],
         ]);
     }
 }
