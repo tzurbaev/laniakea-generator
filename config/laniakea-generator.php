@@ -121,11 +121,11 @@ return [
             'path' => '{path}/Http/Requests/Destroy{resource:singular:ucfirst}Request.php',
         ],
         Stub::API_CONTROLLER->value => [
-            'class' => '{namespace}\Http\Controllers\Api\{resource:plural:ucfirst}Controller',
+            'class' => '{namespace}\Http\{resource:plural:ucfirst}ApiController',
             'path' => '{path}/Http/{resource:plural:ucfirst}ApiController.php',
         ],
         Stub::WEB_CONTROLLER->value => [
-            'class' => '{namespace}\Http\Controllers\Web\{resource:plural:ucfirst}Controller',
+            'class' => '{namespace}\Http\{resource:plural:ucfirst}Controller',
             'path' => '{path}/Http/{resource:plural:ucfirst}Controller.php',
         ],
         Stub::MODEL->value => [

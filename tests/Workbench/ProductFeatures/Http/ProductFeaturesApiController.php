@@ -20,7 +20,7 @@ use Laniakea\Tests\Workbench\ProductFeatures\Repositories\ProductFeaturesReposit
 use Laniakea\Tests\Workbench\ProductFeatures\Resources\ProductFeaturesResource;
 use Laniakea\Tests\Workbench\ProductFeatures\Transformers\ProductFeatureTransformer;
 
-readonly class ProductFeaturesController
+readonly class ProductFeaturesApiController
 {
     public function index(
         ListProductFeaturesRequest $request,
