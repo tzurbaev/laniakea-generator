@@ -14,12 +14,7 @@ class EditRequestStub extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-        return [];
-    }
-
-    public function getResource(): ModelStub
+    public function getResourceModel(): ModelStub
     {
         return $this->route('{resource:singular}');
     }

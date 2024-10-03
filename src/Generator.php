@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laniakea\Generator\Config\GeneratorConfig;
 use Laniakea\Generator\Enums\Replacement;
-use Laniakea\Generator\Enums\Stub;
 
 readonly class Generator
 {
@@ -27,19 +26,16 @@ readonly class Generator
         $stubs = config('laniakea-generator.stubs', []);
         $customDir = $this->config->forceDefaultStubs ? null : config('laniakea-generator.stubs_dir');
 
-        return collect($stubs)->map(function (array $data, string $stubName) use ($customDir) {
-            $stub = Stub::tryFrom($stubName);
-
-            if (is_null($stub)) {
-                return null;
-            } elseif (!isset($data['class']) || !isset($data['path'])) {
+        return collect($stubs)->map(function (array $data) use ($customDir) {
+            if (!isset($data['stub_path']) || !isset($data['target_path'])) {
                 return null;
             }
 
             return new GeneratorStub(
-                stub: $stub,
-                targetClass: $data['class'],
-                targetPath: $data['path'],
+                stubClass: $data['stub_class'] ?? null,
+                stubPath: $data['stub_path'],
+                targetClass: $data['target_class'] ?? null,
+                targetPath: $data['target_path'],
                 defaultDir: __DIR__.'/../stubs',
                 customDir: is_string($customDir) || is_null($customDir) ? $customDir : null,
             );
@@ -116,6 +112,10 @@ readonly class Generator
         $search = array_keys($replacements);
 
         return $stubs->mapWithKeys(function (GeneratorStub $stub) use ($search, $replacements) {
+            if (is_null($stub->getStubClass()) || is_null($stub->getTargetClass())) {
+                return [];
+            }
+
             $stubFCQN = Str::replace($search, $replacements, $stub->getStubClass());
             $targetFCQN = Str::replace($search, $replacements, $stub->getTargetClass());
 

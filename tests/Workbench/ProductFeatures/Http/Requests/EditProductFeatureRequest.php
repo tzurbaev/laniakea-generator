@@ -14,11 +14,6 @@ class EditProductFeatureRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-        return [];
-    }
-
     public function getProductFeature(): ProductFeature
     {
         return $this->route('productFeature');

@@ -49,7 +49,7 @@ readonly class ApiControllerStub
 
     public function show(ViewRequestStub $request, ResourceRequestInterface $requester): JsonResponse
     {
-        return fractal($request->getResource(), new TransformerStub())
+        return fractal($request->getResourceModel(), new TransformerStub())
             ->parseIncludes($requester->getInclusions())
             ->respond();
     }
@@ -58,20 +58,20 @@ readonly class ApiControllerStub
     {
         return response()->json([
             'data' => [
-                'form' => $formsManager->getFormData(new EditFormStub($request->getResource())),
+                'form' => $formsManager->getFormData(new EditFormStub($request->getResourceModel())),
             ],
         ]);
     }
 
     public function update(UpdateRequestStub $request, UpdateActionStub $action): JsonResponse
     {
-        return fractal($action->update($request, $request->getResource()), new TransformerStub())
+        return fractal($action->update($request, $request->getResourceModel()), new TransformerStub())
             ->respond();
     }
 
     public function destroy(DestroyRequestStub $request, DestroyActionStub $action): Response
     {
-        $action->destroy($request->getResource());
+        $action->destroy($request->getResourceModel());
 
         return response()->noContent();
     }

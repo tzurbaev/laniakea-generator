@@ -8,7 +8,7 @@ use Laniakea\Tests\Workbench\ProductFeatures\Http\Requests\UpdateProductFeatureR
 use Laniakea\Tests\Workbench\ProductFeatures\Models\ProductFeature;
 use Laniakea\Tests\Workbench\ProductFeatures\Repositories\ProductFeaturesRepository;
 
-readonly class UpdateProductFeatureAction
+readonly class UpdateProductFeature
 {
     public function __construct(private ProductFeaturesRepository $repository)
     {

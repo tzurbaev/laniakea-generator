@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Laniakea\Generator\Enums\Stub;
-
 return [
     /*
      * Root namespace that will be used in all generated classes.
@@ -45,10 +43,7 @@ return [
      * - {resource:plural:words:title} - plural resource name with spaces between words and first letter of each word capitalized (e.g. Users or Post Comments);
      */
     'custom_replacements' => [
-        'Stubs\Vendor\AbstractDataTable' => 'Virgo\Application\DataTables\AbstractDataTable',
-        'Stubs\Vendor\AbstractForm' => 'Virgo\Application\Forms\AbstractForm',
-        'Stubs\Vendor\AbstractTransformer' => 'Virgo\Application\Fractal\AbstractTransformer',
-        'getResource()' => 'get{resource:singular:ucfirst}()',
+        'getResourceModel()' => 'get{resource:singular:ucfirst}()',
         '$this->model' => '$this->{resource:singular}',
         '$model' => '${resource:singular}',
     ],
@@ -60,93 +55,131 @@ return [
      * Additional {path} tag can be used to specify root directory (only in 'path' key of each stub).
      */
     'stubs' => [
-        Stub::CREATE_ACTION->value => [
-            'class' => '{namespace}\Actions\Create{resource:singular:ucfirst}Action',
-            'path' => '{path}/Actions/Create{resource:singular:ucfirst}Action.php',
+        [
+            'stub_class' => 'Stubs\Actions\CreateActionStub',
+            'stub_path' => 'Actions/CreateActionStub.php',
+            'target_class' => '{namespace}\Actions\Create{resource:singular:ucfirst}',
+            'target_path' => '{path}/Actions/Create{resource:singular:ucfirst}.php',
         ],
-        Stub::UPDATE_ACTION->value => [
-            'class' => '{namespace}\Actions\Update{resource:singular:ucfirst}Action',
-            'path' => '{path}/Actions/Update{resource:singular:ucfirst}Action.php',
+        [
+            'stub_class' => 'Stubs\Actions\UpdateActionStub',
+            'stub_path' => 'Actions/UpdateActionStub.php',
+            'target_class' => '{namespace}\Actions\Update{resource:singular:ucfirst}',
+            'target_path' => '{path}/Actions/Update{resource:singular:ucfirst}.php',
         ],
-        Stub::DESTROY_ACTION->value => [
-            'class' => '{namespace}\Actions\Destroy{resource:singular:ucfirst}Action',
-            'path' => '{path}/Actions/Destroy{resource:singular:ucfirst}Action.php',
+        [
+            'stub_class' => 'Stubs\Actions\DestroyActionStub',
+            'stub_path' => 'Actions/DestroyActionStub.php',
+            'target_class' => '{namespace}\Actions\Destroy{resource:singular:ucfirst}',
+            'target_path' => '{path}/Actions/Destroy{resource:singular:ucfirst}.php',
         ],
-        Stub::DATATABLE->value => [
-            'class' => '{namespace}\DataTables\{resource:plural:ucfirst}DataTable',
-            'path' => '{path}/DataTables/{resource:plural:ucfirst}DataTable.php',
+        [
+            'stub_class' => 'Stubs\Exceptions\NotFoundExceptionStub',
+            'stub_path' => 'Exceptions/NotFoundExceptionStub.php',
+            'target_class' => '{namespace}\Exceptions\{resource:singular:ucfirst}NotFoundException',
+            'target_path' => '{path}/Exceptions/{resource:singular:ucfirst}NotFoundException.php',
         ],
-        Stub::NOT_FOUND_EXCEPTION->value => [
-            'class' => '{namespace}\Exceptions\{resource:singular:ucfirst}NotFoundException',
-            'path' => '{path}/Exceptions/{resource:singular:ucfirst}NotFoundException.php',
+        [
+            'stub_class' => 'Stubs\Forms\AbstractFormStub',
+            'stub_path' => 'Forms/AbstractFormStub.php',
+            'target_class' => '{namespace}\Forms\Abstract{resource:singular:ucfirst}Form',
+            'target_path' => '{path}/Forms/Abstract{resource:singular:ucfirst}Form.php',
         ],
-        Stub::ABSTRACT_FORM->value => [
-            'class' => '{namespace}\Forms\Abstract{resource:singular:ucfirst}Form',
-            'path' => '{path}/Forms/Abstract{resource:singular:ucfirst}Form.php',
+        [
+            'stub_class' => 'Stubs\Forms\CreateFormStub',
+            'stub_path' => 'Forms/CreateFormStub.php',
+            'target_class' => '{namespace}\Forms\Create{resource:singular:ucfirst}Form',
+            'target_path' => '{path}/Forms/Create{resource:singular:ucfirst}Form.php',
         ],
-        Stub::CREATE_FORM->value => [
-            'class' => '{namespace}\Forms\Create{resource:singular:ucfirst}Form',
-            'path' => '{path}/Forms/Create{resource:singular:ucfirst}Form.php',
+        [
+            'stub_class' => 'Stubs\Forms\EditFormStub',
+            'stub_path' => 'Forms/EditFormStub.php',
+            'target_class' => '{namespace}\Forms\Edit{resource:singular:ucfirst}Form',
+            'target_path' => '{path}/Forms/Edit{resource:singular:ucfirst}Form.php',
         ],
-        Stub::EDIT_FORM->value => [
-            'class' => '{namespace}\Forms\Edit{resource:singular:ucfirst}Form',
-            'path' => '{path}/Forms/Edit{resource:singular:ucfirst}Form.php',
+        [
+            'stub_class' => 'Stubs\Http\Requests\ListRequestStub',
+            'stub_path' => 'Http/Requests/ListRequestStub.php',
+            'target_class' => '{namespace}\Http\Requests\List{resource:plural:ucfirst}Request',
+            'target_path' => '{path}/Http/Requests/List{resource:plural:ucfirst}Request.php',
         ],
-        Stub::LIST_REQUEST->value => [
-            'class' => '{namespace}\Http\Requests\List{resource:plural:ucfirst}Request',
-            'path' => '{path}/Http/Requests/List{resource:plural:ucfirst}Request.php',
+        [
+            'stub_class' => 'Stubs\Http\Requests\CreateRequestStub',
+            'stub_path' => 'Http/Requests/CreateRequestStub.php',
+            'target_class' => '{namespace}\Http\Requests\Create{resource:singular:ucfirst}Request',
+            'target_path' => '{path}/Http/Requests/Create{resource:singular:ucfirst}Request.php',
         ],
-        Stub::CREATE_REQUEST->value => [
-            'class' => '{namespace}\Http\Requests\Create{resource:singular:ucfirst}Request',
-            'path' => '{path}/Http/Requests/Create{resource:singular:ucfirst}Request.php',
+        [
+            'stub_class' => 'Stubs\Http\Requests\StoreRequestStub',
+            'stub_path' => 'Http/Requests/StoreRequestStub.php',
+            'target_class' => '{namespace}\Http\Requests\Store{resource:singular:ucfirst}Request',
+            'target_path' => '{path}/Http/Requests/Store{resource:singular:ucfirst}Request.php',
         ],
-        Stub::STORE_REQUEST->value => [
-            'class' => '{namespace}\Http\Requests\Store{resource:singular:ucfirst}Request',
-            'path' => '{path}/Http/Requests/Store{resource:singular:ucfirst}Request.php',
+        [
+            'stub_class' => 'Stubs\Http\Requests\ViewRequestStub',
+            'stub_path' => 'Http/Requests/ViewRequestStub.php',
+            'target_class' => '{namespace}\Http\Requests\View{resource:singular:ucfirst}Request',
+            'target_path' => '{path}/Http/Requests/View{resource:singular:ucfirst}Request.php',
         ],
-        Stub::VIEW_REQUEST->value => [
-            'class' => '{namespace}\Http\Requests\View{resource:singular:ucfirst}Request',
-            'path' => '{path}/Http/Requests/View{resource:singular:ucfirst}Request.php',
+        [
+            'stub_class' => 'Stubs\Http\Requests\EditRequestStub',
+            'stub_path' => 'Http/Requests/EditRequestStub.php',
+            'target_class' => '{namespace}\Http\Requests\Edit{resource:singular:ucfirst}Request',
+            'target_path' => '{path}/Http/Requests/Edit{resource:singular:ucfirst}Request.php',
         ],
-        Stub::EDIT_REQUEST->value => [
-            'class' => '{namespace}\Http\Requests\Edit{resource:singular:ucfirst}Request',
-            'path' => '{path}/Http/Requests/Edit{resource:singular:ucfirst}Request.php',
+        [
+            'stub_class' => 'Stubs\Http\Requests\UpdateRequestStub',
+            'stub_path' => 'Http/Requests/UpdateRequestStub.php',
+            'target_class' => '{namespace}\Http\Requests\Update{resource:singular:ucfirst}Request',
+            'target_path' => '{path}/Http/Requests/Update{resource:singular:ucfirst}Request.php',
         ],
-        Stub::UPDATE_REQUEST->value => [
-            'class' => '{namespace}\Http\Requests\Update{resource:singular:ucfirst}Request',
-            'path' => '{path}/Http/Requests/Update{resource:singular:ucfirst}Request.php',
+        [
+            'stub_class' => 'Stubs\Http\Requests\DestroyRequestStub',
+            'stub_path' => 'Http/Requests/DestroyRequestStub.php',
+            'target_class' => '{namespace}\Http\Requests\Destroy{resource:singular:ucfirst}Request',
+            'target_path' => '{path}/Http/Requests/Destroy{resource:singular:ucfirst}Request.php',
         ],
-        Stub::DESTROY_REQUEST->value => [
-            'class' => '{namespace}\Http\Requests\Destroy{resource:singular:ucfirst}Request',
-            'path' => '{path}/Http/Requests/Destroy{resource:singular:ucfirst}Request.php',
+        [
+            'stub_class' => 'Stubs\Http\ApiControllerStub',
+            'stub_path' => 'Http/ApiControllerStub.php',
+            'target_class' => '{namespace}\Http\{resource:plural:ucfirst}ApiController',
+            'target_path' => '{path}/Http/{resource:plural:ucfirst}ApiController.php',
         ],
-        Stub::API_CONTROLLER->value => [
-            'class' => '{namespace}\Http\{resource:plural:ucfirst}ApiController',
-            'path' => '{path}/Http/{resource:plural:ucfirst}ApiController.php',
+        [
+            'stub_class' => 'Stubs\Http\ControllerStub',
+            'stub_path' => 'Http/ControllerStub.php',
+            'target_class' => '{namespace}\Http\{resource:plural:ucfirst}Controller',
+            'target_path' => '{path}/Http/{resource:plural:ucfirst}Controller.php',
         ],
-        Stub::WEB_CONTROLLER->value => [
-            'class' => '{namespace}\Http\{resource:plural:ucfirst}Controller',
-            'path' => '{path}/Http/{resource:plural:ucfirst}Controller.php',
+        [
+            'stub_class' => 'Stubs\Models\ModelStub',
+            'stub_path' => 'Models/ModelStub.php',
+            'target_class' => '{namespace}\Models\{resource:singular:ucfirst}',
+            'target_path' => '{path}/Models/{resource:singular:ucfirst}.php',
         ],
-        Stub::MODEL->value => [
-            'class' => '{namespace}\Models\{resource:singular:ucfirst}',
-            'path' => '{path}/Models/{resource:singular:ucfirst}.php',
+        [
+            'stub_class' => 'Stubs\Repositories\RepositoryStub',
+            'stub_path' => 'Repositories/RepositoryStub.php',
+            'target_class' => '{namespace}\Repositories\{resource:plural:ucfirst}Repository',
+            'target_path' => '{path}/Repositories/{resource:plural:ucfirst}Repository.php',
         ],
-        Stub::REPOSITORY->value => [
-            'class' => '{namespace}\Repositories\{resource:plural:ucfirst}Repository',
-            'path' => '{path}/Repositories/{resource:plural:ucfirst}Repository.php',
+        [
+            'stub_class' => 'Stubs\Resources\ResourceStub',
+            'stub_path' => 'Resources/ResourceStub.php',
+            'target_class' => '{namespace}\Resources\{resource:plural:ucfirst}Resource',
+            'target_path' => '{path}/Resources/{resource:plural:ucfirst}Resource.php',
         ],
-        Stub::RESOURCE->value => [
-            'class' => '{namespace}\Resources\{resource:plural:ucfirst}Resource',
-            'path' => '{path}/Resources/{resource:plural:ucfirst}Resource.php',
+        [
+            'stub_class' => 'Stubs\Resources\ResourceRegistrarStub',
+            'stub_path' => 'Resources/ResourceRegistrarStub.php',
+            'target_class' => '{namespace}\Resources\{resource:plural:ucfirst}Registrar',
+            'target_path' => '{path}/Resources/{resource:plural:ucfirst}Registrar.php',
         ],
-        Stub::RESOURCE_REGISTRAR->value => [
-            'class' => '{namespace}\Resources\{resource:plural:ucfirst}Registrar',
-            'path' => '{path}/Resources/{resource:plural:ucfirst}Registrar.php',
-        ],
-        Stub::TRANSFORMER->value => [
-            'class' => '{namespace}\Transformers\{resource:singular:ucfirst}Transformer',
-            'path' => '{path}/Transformers/{resource:singular:ucfirst}Transformer.php',
+        [
+            'stub_class' => 'Stubs\Transformers\TransformerStub',
+            'stub_path' => 'Transformers/TransformerStub.php',
+            'target_class' => '{namespace}\Transformers\{resource:singular:ucfirst}Transformer',
+            'target_path' => '{path}/Transformers/{resource:singular:ucfirst}Transformer.php',
         ],
     ],
 ];

@@ -102,14 +102,16 @@ it('should generate and write files using console command', function () {
         shell_exec('rm -rf '.$actualTargetDir);
     }
 
+    $stubsCount = count(config('laniakea-generator.stubs', []));
+
     $this->artisan('laniakea:generate')
         ->expectsQuestion('Enter resource name (singular, camel-cased)', 'productFeature')
         ->expectsQuestion('Enter root namespace', 'Laniakea\Tests\Workbench')
         ->expectsQuestion('Enter root namespace path', 'src')
         ->expectsOutput('Generating resource [productFeature].')
         ->expectsOutput('Root namespace: [Laniakea\Tests\Workbench\ProductFeatures], root path: ['.$actualTargetDir.'/ProductFeatures'.'].')
-        ->expectsQuestion('Do you want to generate these files (22)?', 'yes')
-        ->expectsOutput('Resource generated successfully, 22 files were created.');
+        ->expectsQuestion('Do you want to generate these files ('.$stubsCount.')?', 'yes')
+        ->expectsOutput('Resource generated successfully, '.$stubsCount.' files were created.');
 
     // Retrieve generated files
     $resource = new GeneratorResource('productFeature');
@@ -156,14 +158,16 @@ it('should override existed files', function () {
         shell_exec('rm -rf '.$actualTargetDir);
     }
 
+    $stubsCount = count(config('laniakea-generator.stubs', []));
+
     $this->artisan('laniakea:generate')
         ->expectsQuestion('Enter resource name (singular, camel-cased)', 'productFeature')
         ->expectsQuestion('Enter root namespace', 'Laniakea\Tests\Workbench')
         ->expectsQuestion('Enter root namespace path', 'src')
         ->expectsOutput('Generating resource [productFeature].')
         ->expectsOutput('Root namespace: [Laniakea\Tests\Workbench\ProductFeatures], root path: ['.$actualTargetDir.'/ProductFeatures'.'].')
-        ->expectsQuestion('Do you want to generate these files (22)?', 'yes')
-        ->expectsOutput('Resource generated successfully, 22 files were created.');
+        ->expectsQuestion('Do you want to generate these files ('.$stubsCount.')?', 'yes')
+        ->expectsOutput('Resource generated successfully, '.$stubsCount.' files were created.');
 
     // Retrieve generated files
     $resource = new GeneratorResource('productFeature');
@@ -205,9 +209,9 @@ it('should override existed files', function () {
         ->expectsQuestion('Enter root namespace path', 'src')
         ->expectsOutput('Generating resource [productFeature].')
         ->expectsOutput('Root namespace: [Laniakea\Tests\WorkbenchSecond\ProductFeatures], root path: ['.$actualTargetDir.'/ProductFeatures'.'].')
-        ->expectsQuestion('Do you want to generate these files (22)?', 'yes')
+        ->expectsQuestion('Do you want to generate these files ('.$stubsCount.')?', 'yes')
         ->expectsQuestion('File ['.$actualTargetDir.$firstFile.'] already exists. Override?', OverrideFileAnswer::YES_ALL->value)
-        ->expectsOutput('Resource generated successfully, 22 files were created.');
+        ->expectsOutput('Resource generated successfully, '.$stubsCount.' files were created.');
 
     // All files were overriden, no similar files should be found.
     collect($files)->each(function (array $file) {
@@ -234,14 +238,16 @@ it('should not override existed files', function () {
         shell_exec('rm -rf '.$actualTargetDir);
     }
 
+    $stubsCount = count(config('laniakea-generator.stubs', []));
+
     $this->artisan('laniakea:generate')
         ->expectsQuestion('Enter resource name (singular, camel-cased)', 'productFeature')
         ->expectsQuestion('Enter root namespace', 'Laniakea\Tests\Workbench')
         ->expectsQuestion('Enter root namespace path', 'src')
         ->expectsOutput('Generating resource [productFeature].')
         ->expectsOutput('Root namespace: [Laniakea\Tests\Workbench\ProductFeatures], root path: ['.$actualTargetDir.'/ProductFeatures'.'].')
-        ->expectsQuestion('Do you want to generate these files (22)?', 'yes')
-        ->expectsOutput('Resource generated successfully, 22 files were created.');
+        ->expectsQuestion('Do you want to generate these files ('.$stubsCount.')?', 'yes')
+        ->expectsOutput('Resource generated successfully, '.$stubsCount.' files were created.');
 
     // Retrieve generated files
     $resource = new GeneratorResource('productFeature');
@@ -283,7 +289,7 @@ it('should not override existed files', function () {
         ->expectsQuestion('Enter root namespace path', 'src')
         ->expectsOutput('Generating resource [productFeature].')
         ->expectsOutput('Root namespace: [Laniakea\Tests\WorkbenchSecond\ProductFeatures], root path: ['.$actualTargetDir.'/ProductFeatures'.'].')
-        ->expectsQuestion('Do you want to generate these files (22)?', 'yes')
+        ->expectsQuestion('Do you want to generate these files ('.$stubsCount.')?', 'yes')
         ->expectsQuestion('File ['.$actualTargetDir.$firstFile.'] already exists. Override?', OverrideFileAnswer::NO_ALL->value)
         ->expectsOutput('Resource generated successfully, 0 files were created.');
 

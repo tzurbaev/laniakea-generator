@@ -14,15 +14,15 @@ class UpdateRequestStub extends FormRequest
         return true;
     }
 
+    public function getResourceModel(): ModelStub
+    {
+        return $this->route('{resource:singular}');
+    }
+
     public function rules(): array
     {
         return [
             //
         ];
-    }
-
-    public function getResource(): ModelStub
-    {
-        return $this->route('{resource:singular}');
     }
 }

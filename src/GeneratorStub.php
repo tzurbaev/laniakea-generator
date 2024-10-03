@@ -4,18 +4,27 @@ declare(strict_types=1);
 
 namespace Laniakea\Generator;
 
-use Laniakea\Generator\Enums\Stub;
-
 readonly class GeneratorStub
 {
     public function __construct(
-        private Stub $stub,
-        private string $targetClass,
+        private ?string $stubClass,
+        private string $stubPath,
+        private ?string $targetClass,
         private string $targetPath,
         private string $defaultDir,
         private ?string $customDir,
     ) {
         //
+    }
+
+    /**
+     * Get the class name of the current stub.
+     *
+     * @return string|null
+     */
+    public function getStubClass(): ?string
+    {
+        return $this->stubClass;
     }
 
     /**
@@ -26,32 +35,27 @@ readonly class GeneratorStub
      */
     public function getStubPath(): string
     {
-        $path = $this->stub->getPath();
-        $customPath = $this->customDir ? realpath($this->customDir.'/'.$path) : null;
+        $customPath = $this->customDir ? realpath($this->customDir.'/'.$this->stubPath) : null;
 
         if (!is_null($customPath) && $customPath !== false) {
             return $customPath;
         }
 
-        return realpath($this->defaultDir.'/'.$path);
-    }
+        $defaultPath = realpath($this->defaultDir.'/'.$this->stubPath);
 
-    /**
-     * Get the class name of the current stub.
-     *
-     * @return string
-     */
-    public function getStubClass(): string
-    {
-        return $this->stub->getClass();
+        if ($defaultPath === false) {
+            throw new \RuntimeException('Stub file ['.$this->stubPath.'] does not exist!');
+        }
+
+        return $defaultPath;
     }
 
     /**
      * Get the target class name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getTargetClass(): string
+    public function getTargetClass(): ?string
     {
         return $this->targetClass;
     }

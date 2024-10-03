@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Stubs\Forms;
 
-use Stubs\Vendor\AbstractForm;
+use Laniakea\Forms\AbstractForm;
 
 abstract class AbstractFormStub extends AbstractForm
 {
@@ -19,6 +19,11 @@ abstract class AbstractFormStub extends AbstractForm
     }
 
     public function getSections(): array
+    {
+        return [];
+    }
+
+    public function getButtons(): array
     {
         return [];
     }

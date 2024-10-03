@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Stubs\Transformers;
 
 use Stubs\Models\ModelStub;
-use Stubs\Vendor\AbstractTransformer;
 
-class TransformerStub extends AbstractTransformer
+class TransformerStub
 {
     public function transform(ModelStub $model): array
     {

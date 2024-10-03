@@ -9,9 +9,9 @@ use Illuminate\Http\Response;
 use Laniakea\Forms\Interfaces\FormsManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceRequestInterface;
-use Laniakea\Tests\Workbench\ProductFeatures\Actions\CreateProductFeatureAction;
-use Laniakea\Tests\Workbench\ProductFeatures\Actions\DestroyProductFeatureAction;
-use Laniakea\Tests\Workbench\ProductFeatures\Actions\UpdateProductFeatureAction;
+use Laniakea\Tests\Workbench\ProductFeatures\Actions\CreateProductFeature;
+use Laniakea\Tests\Workbench\ProductFeatures\Actions\DestroyProductFeature;
+use Laniakea\Tests\Workbench\ProductFeatures\Actions\UpdateProductFeature;
 use Laniakea\Tests\Workbench\ProductFeatures\Forms\EditProductFeatureForm;
 use Laniakea\Tests\Workbench\ProductFeatures\Http\Requests\DestroyProductFeatureRequest;
 use Laniakea\Tests\Workbench\ProductFeatures\Http\Requests\EditProductFeatureRequest;
@@ -41,7 +41,7 @@ readonly class ProductFeaturesApiController
             ->respond();
     }
 
-    public function store(StoreProductFeatureRequest $request, CreateProductFeatureAction $action): JsonResponse
+    public function store(StoreProductFeatureRequest $request, CreateProductFeature $action): JsonResponse
     {
         return fractal($action->create($request), new ProductFeatureTransformer())
             ->respond();
@@ -63,13 +63,13 @@ readonly class ProductFeaturesApiController
         ]);
     }
 
-    public function update(UpdateProductFeatureRequest $request, UpdateProductFeatureAction $action): JsonResponse
+    public function update(UpdateProductFeatureRequest $request, UpdateProductFeature $action): JsonResponse
     {
         return fractal($action->update($request, $request->getProductFeature()), new ProductFeatureTransformer())
             ->respond();
     }
 
-    public function destroy(DestroyProductFeatureRequest $request, DestroyProductFeatureAction $action): Response
+    public function destroy(DestroyProductFeatureRequest $request, DestroyProductFeature $action): Response
     {
         $action->destroy($request->getProductFeature());
 

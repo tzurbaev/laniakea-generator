@@ -29,7 +29,7 @@ readonly class ControllerStub
     public function edit(EditRequestStub $request, FormsManagerInterface $formsManager): View
     {
         return view('crud.edit', [
-            'form' => $formsManager->getFormData(new EditFormStub($request->getResource())),
+            'form' => $formsManager->getFormData(new EditFormStub($request->getResourceModel())),
         ]);
     }
 }

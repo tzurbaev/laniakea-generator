@@ -14,15 +14,15 @@ class UpdateProductFeatureRequest extends FormRequest
         return true;
     }
 
+    public function getProductFeature(): ProductFeature
+    {
+        return $this->route('productFeature');
+    }
+
     public function rules(): array
     {
         return [
             //
         ];
-    }
-
-    public function getProductFeature(): ProductFeature
-    {
-        return $this->route('productFeature');
     }
 }

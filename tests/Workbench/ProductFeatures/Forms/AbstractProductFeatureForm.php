@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Laniakea\Tests\Workbench\ProductFeatures\Forms;
 
-use Virgo\Application\Forms\AbstractForm;
+use Laniakea\Forms\AbstractForm;
 
 abstract class AbstractProductFeatureForm extends AbstractForm
 {
@@ -19,6 +19,11 @@ abstract class AbstractProductFeatureForm extends AbstractForm
     }
 
     public function getSections(): array
+    {
+        return [];
+    }
+
+    public function getButtons(): array
     {
         return [];
     }
