@@ -50,9 +50,11 @@ return [
 
     /**
      * List of available stubs & their target FCQN and location.
-     * The 'class' and 'path' keys can contain template tags that will be replaced with resource name (see above).
+     * The 'target_class' and 'target_path' keys can contain template tags that
+     * will be replaced with resource name (see above).
      *
-     * Additional {path} tag can be used to specify root directory (only in 'path' key of each stub).
+     * Additional {path} and {base_path} tags can be used to specify root directory
+     * and application's base path respectively (only in 'target_path' key of each stub).
      */
     'stubs' => [
         [

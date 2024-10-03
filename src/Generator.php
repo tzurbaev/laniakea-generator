@@ -70,6 +70,7 @@ readonly class Generator
             'namespace Stubs\\' => 'namespace '.$this->config->namespace->getNamespace().'\\',
             ...$this->getCustomReplacements($baseReplacements),
             '{path}' => $this->config->namespace->getFullPath(),
+            '{base_path}' => base_path(),
         ];
 
         $search = array_keys($replacements);
