@@ -184,4 +184,15 @@ return [
             'target_path' => '{path}/Transformers/{resource:singular:ucfirst}Transformer.php',
         ],
     ],
+
+    /**
+     * List of custom questions that will be asked before generating classes.
+     *
+     * You can use GeneratorConfig's addCustomReplacements() method to add additional
+     * replacements that can be used in stubs. All custom questions must implement the
+     * Laniakea\Generator\Interfaces\GeneratorQuestionInterface interface.
+     */
+    'questions' => [
+        //
+    ],
 ];

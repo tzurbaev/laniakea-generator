@@ -4,13 +4,42 @@ declare(strict_types=1);
 
 namespace Laniakea\Generator\Config;
 
-readonly class GeneratorConfig
+class GeneratorConfig
 {
+    protected array $customReplacements = [];
+
     public function __construct(
-        public GeneratorResource $resource,
-        public GeneratorNamespace $namespace,
-        public bool $forceDefaultStubs = false,
+        public readonly GeneratorResource $resource,
+        public readonly GeneratorNamespace $namespace,
+        public readonly bool $forceDefaultStubs = false,
     ) {
         //
+    }
+
+    /**
+     * Add custom replacements to be used in stubs.
+     *
+     * @param array $replacements
+     *
+     * @return $this
+     */
+    public function addCustomReplacements(array $replacements): static
+    {
+        $this->customReplacements = [
+            ...$this->customReplacements,
+            ...$replacements,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Get list of custom replacements.
+     *
+     * @return array
+     */
+    public function getCustomReplacements(): array
+    {
+        return $this->customReplacements;
     }
 }

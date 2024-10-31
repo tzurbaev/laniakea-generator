@@ -55,22 +55,25 @@ readonly class Generator
             return [];
         }
 
-        // Base replacements will be used while generating stub replacements
-        // and custom replacements from config file.
+        // Base replacements will be used while generating stub replacements,
+        // custom replacements from the config file, and replacements from custom questions.
         $baseReplacements = [
             Replacement::NAMESPACE->value => $this->config->namespace->getNamespace(),
             ...$this->config->resource->replacements,
+            '{path}' => $this->config->namespace->getFullPath(),
+            '{base_path}' => base_path(),
         ];
 
+        // Stub replacements are used to replace FCQNs and base class names in the source code.
         $stubReplacements = $this->getStubReplacements($stubs, $baseReplacements);
 
+        // All replacements will be applied to the source code.
         $replacements = [
             ...$baseReplacements,
             ...$stubReplacements,
             'namespace Stubs\\' => 'namespace '.$this->config->namespace->getNamespace().'\\',
-            ...$this->getCustomReplacements($baseReplacements),
-            '{path}' => $this->config->namespace->getFullPath(),
-            '{base_path}' => base_path(),
+            ...$this->getCustomReplacements($baseReplacements, config('laniakea-generator.custom_replacements', [])),
+            ...$this->getCustomReplacements($baseReplacements, $this->config->getCustomReplacements()),
         ];
 
         $search = array_keys($replacements);
@@ -131,20 +134,22 @@ readonly class Generator
     }
 
     /**
-     * If there are custom replacements in the config file, they will be applied to the source code.
+     * If there are custom replacements, they will be applied to the source code.
      *
      * @param array $replacements
+     * @param array $custom
      *
      * @return array
      */
-    protected function getCustomReplacements(array $replacements): array
+    protected function getCustomReplacements(array $replacements, array $custom): array
     {
-        $custom = config('laniakea-generator.custom_replacements', []);
-
         if (!count($custom)) {
             return [];
         }
 
+        // Custom replacements might contain placeholders that need to be
+        // replaced with the actual values. The `$replacements` array
+        // is a base replacements list.
         $search = array_keys($replacements);
 
         return collect($custom)->mapWithKeys(fn (string $value, string $key) => [

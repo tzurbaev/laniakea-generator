@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Laniakea\Tests\Workbench\CustomQuestions\CustomNumberQuestion;
+
 it('should generate config from input', function () {
     $this->artisan('test:config')
         ->expectsQuestion('Enter resource name (singular, camel-cased)', 'productFeature')
@@ -85,5 +87,17 @@ it('should prioritize arguments over package config', function () {
         ->expectsOutput('Resource: productFeature')
         ->expectsOutput('Namespace: App\ProductFeatures')
         ->expectsOutput('Path: '.base_path('app/ProductFeatures'))
+        ->assertExitCode(0);
+});
+
+it('should ask custom questions from the config file', function () {
+    config()->set('laniakea-generator.questions', [CustomNumberQuestion::class]);
+
+    $this->artisan('test:config productFeature --namespace=Virgo --path=src')
+        ->expectsQuestion('Enter any number', 4)
+        ->expectsOutput('Custom number is [4]')
+        ->expectsOutput('Resource: productFeature')
+        ->expectsOutput('Namespace: Virgo\ProductFeatures')
+        ->expectsOutput('Path: '.base_path('src/ProductFeatures'))
         ->assertExitCode(0);
 });

@@ -5,13 +5,20 @@ declare(strict_types=1);
 namespace Laniakea\Generator\Config;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Str;
 use Laniakea\Generator\Enums\Replacement;
+use Laniakea\Generator\Interfaces\GeneratorQuestionInterface;
 
 use function Laravel\Prompts\text;
 
 readonly class GeneratorConfigBuilder
 {
+    public function __construct(private Container $container)
+    {
+        //
+    }
+
     /**
      * Create generator config from command input or configuration file.
      *
@@ -22,12 +29,15 @@ readonly class GeneratorConfigBuilder
     public function getConfig(Command $command): GeneratorConfig
     {
         $resource = new GeneratorResource($this->getResourceName($command));
-
-        return new GeneratorConfig(
+        $config = new GeneratorConfig(
             resource: $resource,
             namespace: $this->getNamespace($resource, $command),
             forceDefaultStubs: $command->hasOption('default-stubs') && $command->option('default-stubs'),
         );
+
+        $this->askCustomQuestions($command, $config);
+
+        return $config;
     }
 
     /**
@@ -83,5 +93,16 @@ readonly class GeneratorConfigBuilder
             namespace: Str::replace($resource->search, $resource->replacements, $namespace.'\\'.Replacement::RESOURCE_PLURAL_UCFIRST->value),
             path: Str::replace($resource->search, $resource->replacements, $path.'/'.Replacement::RESOURCE_PLURAL_UCFIRST->value),
         );
+    }
+
+    protected function askCustomQuestions(Command $command, GeneratorConfig $config): void
+    {
+        collect(config('laniakea-generator.questions', []))
+            ->each(function (string $questionClass) use ($command, $config): void {
+                /** @var GeneratorQuestionInterface $question */
+                $question = $this->container->make($questionClass);
+
+                $question->ask($command, $config);
+            });
     }
 }
