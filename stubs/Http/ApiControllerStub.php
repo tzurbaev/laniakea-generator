@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Laniakea\Forms\Interfaces\FormsManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceRequestInterface;
+use Laniakea\Transformers\TransformationManager;
 use Stubs\Actions\CreateActionStub;
 use Stubs\Actions\DestroyActionStub;
 use Stubs\Actions\UpdateActionStub;
@@ -36,21 +37,21 @@ readonly class ApiControllerStub
             new RepositoryStub(),
         );
 
-        return fractal($paginator, new TransformerStub())
-            ->parseIncludes($requester->getInclusions())
+        return (new TransformationManager($paginator, new TransformerStub()))
+            ->parseInclusions($requester->getInclusions())
             ->respond();
     }
 
     public function store(StoreRequestStub $request, CreateActionStub $action): JsonResponse
     {
-        return fractal($action->create($request), new TransformerStub())
+        return (new TransformationManager($action->create($request), new TransformerStub()))
             ->respond();
     }
 
     public function show(ViewRequestStub $request, ResourceRequestInterface $requester): JsonResponse
     {
-        return fractal($request->getResourceModel(), new TransformerStub())
-            ->parseIncludes($requester->getInclusions())
+        return (new TransformationManager($request->getResourceModel(), new TransformerStub()))
+            ->parseInclusions($requester->getInclusions())
             ->respond();
     }
 
@@ -65,7 +66,9 @@ readonly class ApiControllerStub
 
     public function update(UpdateRequestStub $request, UpdateActionStub $action): JsonResponse
     {
-        return fractal($action->update($request, $request->getResourceModel()), new TransformerStub())
+        $model = $action->update($request, $request->getResourceModel());
+
+        return (new TransformationManager($model, new TransformerStub()))
             ->respond();
     }
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Laniakea\Forms\Interfaces\FormsManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceManagerInterface;
 use Laniakea\Resources\Interfaces\ResourceRequestInterface;
+use Laniakea\Transformers\TransformationManager;
 use Laniakea\Tests\Workbench\ProductFeatures\Actions\CreateProductFeature;
 use Laniakea\Tests\Workbench\ProductFeatures\Actions\DestroyProductFeature;
 use Laniakea\Tests\Workbench\ProductFeatures\Actions\UpdateProductFeature;
@@ -36,21 +37,21 @@ readonly class ProductFeaturesApiController
             new ProductFeaturesRepository(),
         );
 
-        return fractal($paginator, new ProductFeatureTransformer())
-            ->parseIncludes($requester->getInclusions())
+        return (new TransformationManager($paginator, new ProductFeatureTransformer()))
+            ->parseInclusions($requester->getInclusions())
             ->respond();
     }
 
     public function store(StoreProductFeatureRequest $request, CreateProductFeature $action): JsonResponse
     {
-        return fractal($action->create($request), new ProductFeatureTransformer())
+        return (new TransformationManager($action->create($request), new ProductFeatureTransformer()))
             ->respond();
     }
 
     public function show(ViewProductFeatureRequest $request, ResourceRequestInterface $requester): JsonResponse
     {
-        return fractal($request->getProductFeature(), new ProductFeatureTransformer())
-            ->parseIncludes($requester->getInclusions())
+        return (new TransformationManager($request->getProductFeature(), new ProductFeatureTransformer()))
+            ->parseInclusions($requester->getInclusions())
             ->respond();
     }
 
@@ -65,7 +66,9 @@ readonly class ProductFeaturesApiController
 
     public function update(UpdateProductFeatureRequest $request, UpdateProductFeature $action): JsonResponse
     {
-        return fractal($action->update($request, $request->getProductFeature()), new ProductFeatureTransformer())
+        $productFeature = $action->update($request, $request->getProductFeature());
+
+        return (new TransformationManager($productFeature, new ProductFeatureTransformer()))
             ->respond();
     }
 

@@ -7,6 +7,10 @@ $finder = Symfony\Component\Finder\Finder::create()
         __DIR__.'/stubs',
         __DIR__.'/tests',
     ])
+    ->exclude([
+        // The ProductFeaturesApiController.php triggers 'ordered_imports', but we need to match the stubs.
+        'Workbench/ProductFeatures/Http',
+    ])
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);

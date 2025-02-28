@@ -16,20 +16,20 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/config": "^10.0|^11.0",
-        "illuminate/container": "^10.0|^11.0",
-        "illuminate/contracts": "^10.0|^11.0",
-        "illuminate/database": "^10.0|^11.0",
-        "illuminate/http": "^10.0|^11.0",
-        "illuminate/support": "^10.0|^11.0",
-        "illuminate/validation": "^10.0|^11.0",
-        "laniakea/laniakea": "v1.0.0",
+        "illuminate/config": "^10.0|^11.0|^12.0",
+        "illuminate/container": "^10.0|^11.0|^12.0",
+        "illuminate/contracts": "^10.0|^11.0|^12.0",
+        "illuminate/database": "^10.0|^11.0|^12.0",
+        "illuminate/http": "^10.0|^11.0|^12.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "illuminate/validation": "^10.0|^11.0|^12.0",
+        "laniakea/laniakea": "^1.0",
         "laravel/prompts": "^0.1|^0.2|^0.3"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.64",
-        "orchestra/testbench": "^v9.5",
-        "pestphp/pest": "^2.35"
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^v3.7.4"
     },
     "autoload": {
         "psr-4": {
