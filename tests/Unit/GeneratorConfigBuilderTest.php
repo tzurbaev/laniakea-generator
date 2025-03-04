@@ -125,16 +125,3 @@ it('should use custom stubs group', function () {
         ->expectsOutput('Stubs: custom')
         ->assertExitCode(0);
 });
-
-it('should use forced vendor stubs', function () {
-    config()->set('laniakea-generator.root_namespace', 'Virgo');
-    config()->set('laniakea-generator.root_path', 'src');
-
-    expect(config('laniakea-generator.root_namespace'))->toBe('Virgo')
-        ->and(config('laniakea-generator.root_path'))->toBe('src');
-
-    $this->artisan('test:config productFeature --stubs=vendor')
-        ->doesntExpectOutput('Stubs: vendor')
-        ->expectsOutput('Forcing vendor stubs.')
-        ->assertExitCode(0);
-});

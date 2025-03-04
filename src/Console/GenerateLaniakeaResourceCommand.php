@@ -41,7 +41,7 @@ class GenerateLaniakeaResourceCommand extends Command
 
         $this->comment('Generating resource ['.$config->resource->name.'].');
         $this->comment('Root namespace: ['.$config->namespace->getNamespace().'], root path: ['.$config->namespace->getFullPath().'].');
-        $this->comment($config->forceVendorStubs ? 'Using vendor stubs.' : 'Using ['.$config->stubsGroup.'] stubs group.');
+        $this->comment('Using ['.$config->stubsGroup.'] stubs group.');
 
         if (!confirm('Do you want to generate these files ('.count($files).')?')) {
             $this->comment('Aborted.');

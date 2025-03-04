@@ -12,7 +12,6 @@ class GeneratorConfig
         public readonly GeneratorResource $resource,
         public readonly GeneratorNamespace $namespace,
         public readonly string $stubsGroup = 'default',
-        public readonly bool $forceVendorStubs = false,
     ) {
         //
     }

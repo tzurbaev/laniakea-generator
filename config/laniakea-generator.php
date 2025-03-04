@@ -52,8 +52,8 @@ return [
      * List of available stubs & their target FCQN and location.
      *
      * Stubs are groupped, so you can define multiple groups for your needs.
-     * By default command will use 'default' group, but you can specify the group
-     * via the `--stubs=<group>` option. Provide `--stubs=vendor` to use vendor stubs.
+     * By default the generator command will use the 'default' group, but you
+     * can specify the name via the `--stubs=<group>` option.
      *
      * The 'target_class' and 'target_path' keys can contain template tags that
      * will be replaced with resource name (see above).

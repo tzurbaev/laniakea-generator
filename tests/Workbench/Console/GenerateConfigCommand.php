@@ -18,12 +18,7 @@ class GenerateConfigCommand extends Command
         $this->info('Resource: '.$config->resource->name);
         $this->info('Namespace: '.$config->namespace->getNamespace());
         $this->info('Path: '.$config->namespace->getFullPath());
-
-        if ($config->forceVendorStubs) {
-            $this->info('Forcing vendor stubs.');
-        } else {
-            $this->info('Stubs: '.$config->stubsGroup);
-        }
+        $this->info('Stubs: '.$config->stubsGroup);
 
         return 0;
     }
