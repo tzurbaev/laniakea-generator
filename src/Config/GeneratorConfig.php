@@ -11,7 +11,8 @@ class GeneratorConfig
     public function __construct(
         public readonly GeneratorResource $resource,
         public readonly GeneratorNamespace $namespace,
-        public readonly bool $forceDefaultStubs = false,
+        public readonly string $stubsGroup = 'default',
+        public readonly bool $forceVendorStubs = false,
     ) {
         //
     }

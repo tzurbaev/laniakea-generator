@@ -9,7 +9,7 @@ use Laniakea\Generator\Config\GeneratorConfigBuilder;
 
 class GenerateConfigCommand extends Command
 {
-    protected $signature = 'test:config {resource?} {--namespace=} {--path=}';
+    protected $signature = 'test:config {resource?} {--namespace=} {--path=} {--stubs=default}';
 
     public function handle(GeneratorConfigBuilder $configBuilder): int
     {
@@ -18,6 +18,12 @@ class GenerateConfigCommand extends Command
         $this->info('Resource: '.$config->resource->name);
         $this->info('Namespace: '.$config->namespace->getNamespace());
         $this->info('Path: '.$config->namespace->getFullPath());
+
+        if ($config->forceVendorStubs) {
+            $this->info('Forcing vendor stubs.');
+        } else {
+            $this->info('Stubs: '.$config->stubsGroup);
+        }
 
         return 0;
     }

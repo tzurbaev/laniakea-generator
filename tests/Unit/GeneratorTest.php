@@ -33,7 +33,7 @@ it('should generate files list', function () {
     $generator = new Generator($config);
     $files = $generator->getFiles();
 
-    expect($files)->toHaveCount(count(config('laniakea-generator.stubs')));
+    expect($files)->toHaveCount(count(config('laniakea-generator.stubs.default')));
     collect($files)->each(function (array $file) {
         $path = Str::replace(base_path('src'), '', $file['target']['path']);
         $comparePath = realpath(__DIR__.'/../Workbench'.$path);
@@ -103,7 +103,7 @@ it('should generate and write files using console command', function () {
         shell_exec('rm -rf '.$actualTargetDir);
     }
 
-    $stubsCount = count(config('laniakea-generator.stubs', []));
+    $stubsCount = count(config('laniakea-generator.stubs.default', []));
 
     $this->artisan('laniakea:generate')
         ->expectsQuestion('Enter resource name (singular, camel-cased)', 'productFeature')
@@ -159,7 +159,7 @@ it('should override existed files', function () {
         shell_exec('rm -rf '.$actualTargetDir);
     }
 
-    $stubsCount = count(config('laniakea-generator.stubs', []));
+    $stubsCount = count(config('laniakea-generator.stubs.default', []));
 
     $this->artisan('laniakea:generate')
         ->expectsQuestion('Enter resource name (singular, camel-cased)', 'productFeature')
@@ -239,7 +239,7 @@ it('should not override existed files', function () {
         shell_exec('rm -rf '.$actualTargetDir);
     }
 
-    $stubsCount = count(config('laniakea-generator.stubs', []));
+    $stubsCount = count(config('laniakea-generator.stubs.default', []));
 
     $this->artisan('laniakea:generate')
         ->expectsQuestion('Enter resource name (singular, camel-cased)', 'productFeature')
@@ -309,7 +309,7 @@ it('should not override existed files', function () {
 });
 
 it('should generate additional non-package stubs', function () {
-    config()->set('laniakea-generator.stubs', [
+    config()->set('laniakea-generator.stubs.default', [
         [
             'stub_path' => 'lang/langStub.php',
             'target_path' => '{base_path}/lang/en/{resource:plural}.php',
@@ -318,7 +318,7 @@ it('should generate additional non-package stubs', function () {
 
     config()->set('laniakea-generator.stubs_dir', realpath(__DIR__.'/../Workbench/CustomStubs'));
 
-    expect(config('laniakea-generator.stubs'))->toHaveCount(1)
+    expect(config('laniakea-generator.stubs.default'))->toHaveCount(1)
         ->and(config('laniakea-generator.stubs_dir'))->toBeString()->toBe(realpath(__DIR__.'/../Workbench/CustomStubs'));
 
     $expectedTargetDir = base_path('lang/en');
@@ -356,7 +356,7 @@ it('should generate additional non-package stubs', function () {
 });
 
 it('should generate files with custom questions', function () {
-    config()->set('laniakea-generator.stubs', [
+    config()->set('laniakea-generator.stubs.default', [
         [
             'stub_path' => 'lang/customLangStub.php',
             'target_path' => '{base_path}/lang/en/{resource:plural}.php',
@@ -365,7 +365,7 @@ it('should generate files with custom questions', function () {
     config()->set('laniakea-generator.questions', [CustomNumberQuestion::class]);
     config()->set('laniakea-generator.stubs_dir', realpath(__DIR__.'/../Workbench/CustomStubs'));
 
-    expect(config('laniakea-generator.stubs'))->toHaveCount(1)
+    expect(config('laniakea-generator.stubs.default'))->toHaveCount(1)
         ->and(config('laniakea-generator.stubs_dir'))->toBeString()->toBe(realpath(__DIR__.'/../Workbench/CustomStubs'))
         ->and(config('laniakea-generator.questions'))->toHaveCount(1);
 
@@ -404,3 +404,53 @@ it('should generate files with custom questions', function () {
 
     unlink($actualTargetFile);
 });
+
+it('should generate custom group stubs', function (string $group) {
+    config()->set('laniakea-generator.stubs.'.$group, [
+        [
+            'stub_path' => 'lang/langStub.php',
+            'target_path' => '{base_path}/lang/en/{resource:plural}.php',
+        ],
+    ]);
+
+    config()->set('laniakea-generator.stubs_dir', realpath(__DIR__.'/../Workbench/CustomGrouppedStubs/'.$group));
+
+    expect(config('laniakea-generator.stubs.'.$group))->toHaveCount(1)
+        ->and(config('laniakea-generator.stubs_dir'))->toBeString()->toBe(realpath(__DIR__.'/../Workbench/CustomGrouppedStubs/'.$group));
+
+    $expectedTargetDir = base_path('lang/en');
+    $actualTargetDir = realpath(__DIR__.'/../../vendor/orchestra/testbench-core/laravel').'/lang';
+
+    // Since lang/en directory might not exist, we can't use realpath on full path.
+    // Instead, we'll check that expected dir starrts with actual dir target.
+    expect(Str::startsWith($expectedTargetDir, $actualTargetDir))->toBeTrue();
+
+    $actualTargetFile = $actualTargetDir.'/en/productFeatures.php';
+
+    if (file_exists($actualTargetFile)) {
+        unlink($actualTargetFile);
+    }
+
+    $targetDir = base_path('src');
+
+    $this->artisan('laniakea:generate --stubs='.$group)
+        ->expectsQuestion('Enter resource name (singular, camel-cased)', 'productFeature')
+        ->expectsQuestion('Enter root namespace', 'Laniakea\Tests\Workbench')
+        ->expectsQuestion('Enter root namespace path', 'src')
+        ->expectsOutput('Generating resource [productFeature].')
+        ->expectsOutput('Root namespace: [Laniakea\Tests\Workbench\ProductFeatures], root path: ['.$targetDir.'/ProductFeatures'.'].')
+        ->expectsQuestion('Do you want to generate these files (1)?', 'yes')
+        ->expectsOutput('Resource generated successfully, 1 file was created.');
+
+    expect(file_exists($actualTargetFile))->toBeTrue();
+
+    $actualFile = file_get_contents($actualTargetFile);
+    $expectedFile = file_get_contents(__DIR__.'/../Workbench/CustomGrouppedStubs/output/'.$group.'/productFeatures.php');
+
+    expect($actualFile)->toBe($expectedFile);
+
+    unlink($actualTargetFile);
+})->with([
+    ['group' => 'first-group'],
+    ['group' => 'second-group'],
+]);

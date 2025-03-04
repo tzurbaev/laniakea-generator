@@ -23,8 +23,8 @@ readonly class Generator
      */
     protected function getStubs(): Collection
     {
-        $stubs = config('laniakea-generator.stubs', []);
-        $customDir = $this->config->forceDefaultStubs ? null : config('laniakea-generator.stubs_dir');
+        $stubs = config('laniakea-generator.stubs.'.$this->config->stubsGroup, []);
+        $customDir = $this->config->forceVendorStubs ? null : config('laniakea-generator.stubs_dir');
 
         return collect($stubs)->map(function (array $data) use ($customDir) {
             if (!isset($data['stub_path']) || !isset($data['target_path'])) {

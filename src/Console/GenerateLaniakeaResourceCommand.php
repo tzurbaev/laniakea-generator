@@ -15,7 +15,7 @@ use function Laravel\Prompts\select;
 
 class GenerateLaniakeaResourceCommand extends Command
 {
-    protected $signature = 'laniakea:generate {resource?} {--namespace=} {--path=} {--default-stubs}';
+    protected $signature = 'laniakea:generate {resource?} {--namespace=} {--path=} {--stubs=default}';
     protected $description = 'Generate a new Laniakea resource.';
 
     /**
@@ -41,6 +41,7 @@ class GenerateLaniakeaResourceCommand extends Command
 
         $this->comment('Generating resource ['.$config->resource->name.'].');
         $this->comment('Root namespace: ['.$config->namespace->getNamespace().'], root path: ['.$config->namespace->getFullPath().'].');
+        $this->comment($config->forceVendorStubs ? 'Using vendor stubs.' : 'Using ['.$config->stubsGroup.'] stubs group.');
 
         if (!confirm('Do you want to generate these files ('.count($files).')?')) {
             $this->comment('Aborted.');

@@ -32,7 +32,8 @@ readonly class GeneratorConfigBuilder
         $config = new GeneratorConfig(
             resource: $resource,
             namespace: $this->getNamespace($resource, $command),
-            forceDefaultStubs: $command->hasOption('default-stubs') && $command->option('default-stubs'),
+            stubsGroup: $stubsGroup = $command->hasOption('stubs') ? $command->option('stubs') : 'default',
+            forceVendorStubs: $stubsGroup === 'vendor',
         );
 
         $this->askCustomQuestions($command, $config);

@@ -101,3 +101,40 @@ it('should ask custom questions from the config file', function () {
         ->expectsOutput('Path: '.base_path('src/ProductFeatures'))
         ->assertExitCode(0);
 });
+
+it('should use default stubs group', function () {
+    config()->set('laniakea-generator.root_namespace', 'Virgo');
+    config()->set('laniakea-generator.root_path', 'src');
+
+    expect(config('laniakea-generator.root_namespace'))->toBe('Virgo')
+        ->and(config('laniakea-generator.root_path'))->toBe('src');
+
+    $this->artisan('test:config productFeature')
+        ->expectsOutput('Stubs: default')
+        ->assertExitCode(0);
+});
+
+it('should use custom stubs group', function () {
+    config()->set('laniakea-generator.root_namespace', 'Virgo');
+    config()->set('laniakea-generator.root_path', 'src');
+
+    expect(config('laniakea-generator.root_namespace'))->toBe('Virgo')
+        ->and(config('laniakea-generator.root_path'))->toBe('src');
+
+    $this->artisan('test:config productFeature --stubs=custom')
+        ->expectsOutput('Stubs: custom')
+        ->assertExitCode(0);
+});
+
+it('should use forced vendor stubs', function () {
+    config()->set('laniakea-generator.root_namespace', 'Virgo');
+    config()->set('laniakea-generator.root_path', 'src');
+
+    expect(config('laniakea-generator.root_namespace'))->toBe('Virgo')
+        ->and(config('laniakea-generator.root_path'))->toBe('src');
+
+    $this->artisan('test:config productFeature --stubs=vendor')
+        ->doesntExpectOutput('Stubs: vendor')
+        ->expectsOutput('Forcing vendor stubs.')
+        ->assertExitCode(0);
+});
